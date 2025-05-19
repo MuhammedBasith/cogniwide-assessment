@@ -48,7 +48,7 @@ voice-poc/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/voice-poc.git
+   git clone https://github.com/MuhammedBasith/cogniwide-assessment.git
    cd voice-poc
    ```
 
