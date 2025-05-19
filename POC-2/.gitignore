@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.env/
+.venv/
+venv/
+ENV/
+
+# FastAPI/uvicorn
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# dotenv
+.env
+.env.*
+
+# Database
+*.sqlite3
+*.db
+
+# Misc
+*.bak
+*.tmp

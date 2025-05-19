@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Support Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    #chatbox {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+    }
+
+    #messages {
+      min-height: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      padding-right: 8px;
+    }
+
+    .msg {
+      margin: 10px 0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      max-width: 85%;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .user {
+      background-color: #e3f2fd;
+      align-self: flex-end;
+      color: #1a73e8;
+      margin-left: auto;
+    }
+
+    .bot {
+      background-color: #e8f5e9;
+      color: #388e3c;
+      margin-right: auto;
+    }
+
+    #inputRow {
+      display: flex;
+      gap: 8px;
+    }
+
+    #messageInput {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    #sendBtn {
+      padding: 10px 18px;
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #sendBtn:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    #sendBtn:hover:enabled {
+      background-color: #0f5ec1;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <h2>AI Support Chat</h2>
+    <div id="messages" role="log" aria-live="polite"></div>
+    <div id="inputRow">
+      <input id="messageInput" type="text" placeholder="Type your message..." aria-label="Message input" />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function addMessage(text, sender) {
+      const div = document.createElement('div');
+      div.className = `msg ${sender}`;
+      div.textContent = sender === 'user' ? `You: ${text}` : `Bot: ${text}`;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, 'user');
+      input.value = '';
+      sendBtn.disabled = true;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+        addMessage(data.response, 'bot');
+      } catch (err) {
+        addMessage('Error: ' + err.message, 'bot');
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
