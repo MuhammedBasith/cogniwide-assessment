@@ -40,7 +40,7 @@ This project is a simple, modular customer support system built with Python and 
 
 1. **Clone this repo and enter the folder:**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/MuhammedBasith/cogniwide-assessment.git
    cd poc-2
    ```
 
